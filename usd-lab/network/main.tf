@@ -14,23 +14,14 @@ resource "oci_core_default_security_list" "default_list" {
   display_name = "Outbound only (default)"
 
   egress_security_rules {
-    protocol = "6" // TCP
+    protocol = "all" // TCP
     description = "Allow outbound"
     destination = "0.0.0.0/0"
   }
-}
-
-resource "oci_core_security_list" "ssh_inbound_list" {
-  compartment_id = var.compartment_id
-  vcn_id         = oci_core_vcn.lab_network.id
-  display_name = "Permit SSH inbound"
   ingress_security_rules {
-    protocol = "6" // TCP
-    source = "0.0.0.0/0"
-    tcp_options {
-      max = 22
-      min = 22
-    }
+    protocol = "all"
+    description = "Allow inter-subnet traffic"
+    source = "172.16.0.0/20"
   }
 }
 
