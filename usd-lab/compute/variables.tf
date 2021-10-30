@@ -34,7 +34,7 @@ variable "bastion_user_data" {
     default = <<EOT
     #!/bin/sh
     sudo apt update \
-    && echo \"deb http://http.kali.org/kali kali-rolling main non-free contrib\" | sudo tee /etc/apt/sources.list) \
+    && echo 'deb http://http.kali.org/kali kali-rolling main non-free contrib' | sudo tee /etc/apt/sources.list \
     && wget https://http.kali.org/kali/pool/main/k/kali-archive-keyring/kali-archive-keyring_2020.2_all.deb -O /tmp/keyring.deb \
     && sudo apt install /tmp/keyring.deb \
     && sudo apt update \
