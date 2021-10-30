@@ -13,14 +13,14 @@ provider "oci" {
 }
 
 module "network" {
-  source="./network"
-  
+  source = "./network"
+
   compartment_id = var.compartment_id
 }
 
 module "compute" {
-  source="./compute"
-  
-  compartment_id = var.compartment_id
+  source = "./compute"
+
+  compartment_id   = var.compartment_id
   public_subnet_id = module.network.public_subnet.id
 }
