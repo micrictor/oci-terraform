@@ -23,8 +23,8 @@ variable "bastion_shape" {
 variable "bastion_image" {
     description = "Image for the bastion host"
     type = string
-    // Oracle-Linux-7.9-2021.10.20-0
-    default = "ocid1.image.oc1.us-sanjose-1.aaaaaaaacm32nukryvrugwg2aeupbl342mx7oaa6gz4fwfd7uucm7u36alcq"
+    // Canonical-Ubuntu-20.04-2021.10.15-0
+    default = "ocid1.image.oc1.us-sanjose-1.aaaaaaaaugtulb77ufxo7io3zw2hj2cy34oerrfjweg6hlvxaffze754mm7a"
 }
 
 variable "ssh_authorized_keys" {
