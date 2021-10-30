@@ -35,3 +35,17 @@ variable "ssh_authorized_keys" {
         "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCXNYeVgEsZewIGyHkpXV+KTmJf6J7fgiDnHzSHQ3o12msuXGJXv8+YcjNlvefxhqay9ydxCe7VTXY/W8shXTXLu0/XnKIT5EpH9gQjX38UbynnjEbq9Sm+IwGFyiIqwYt6cQvYSf+BrsXM/K/KnXl6j8+ZyJQ1/bnF2pbohaCjPA+HEbOLuJBoBgXGXdP6B4y+dkxYQvf9LPSK6PSVqdDhWpF7oTOvg9O+XmrUiQL6VABvqf0yp6doIit8clPnF2Ja7Kprxp1/nxfZeUF5jYHKqs8RqO11lrebPTfugTDBd95YYAuaNxdmw9KueKhMyD62se2M81kDn+DIEmNTBDvx CYBR512_groupssh"
     ]
 }
+
+variable "bastion_user_data" {
+    description = "Commands to be ran at boot for the bastion instance. Default installs Kali headless"
+    type = string
+    default = <<EOT
+    #!/bin/sh
+    sudo apt update \
+    && $(echo \"deb http://http.kali.org/kali kali-rolling main non-free contrib\" | sudo tee /etc/apt/sources.list) \
+    && wget https://http.kali.org/kali/pool/main/k/kali-archive-keyring/kali-archive-keyring_2020.2_all.deb -O /tmp/keyring.deb \
+    && sudo apt install /tmp/keyring.deb \
+    && sudo apt update \
+    && sudo DEBIAN_FRONTEND=noninteractive apt install -y kali-linux-headless
+    EOT
+}
