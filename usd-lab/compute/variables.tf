@@ -44,6 +44,27 @@ sudo apt update \
 EOT
 }
 
+variable "metasploitable_user_data" {
+    description = "Commands to be ran at boot for the bastion instance. Default installs Kali headless"
+    type = string
+    default = <<EOT
+#!/bin/sh
+sudo apt-get update
+sudo apt-get install \
+    ca-certificates \
+    curl \
+    gnupg \
+    lsb-release
+curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /usr/share/keyrings/docker-archive-keyring.gpg
+echo \
+  "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/docker-archive-keyring.gpg] https://download.docker.com/linux/ubuntu \
+  $(lsb_release -cs) stable" | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
+sudo apt-get update
+sudo apt-get install -y docker-ce docker-ce-cli containerd.io
+sudo docker run -d --restart always -p 21:21 -p 80:80 -p 445:445 -p 631:631 -p 3000:3000 -p 3500:3500 -p 6697:6697 -p 3306:3306 -p 8181:8181 heywoodlh/vulnerable
+EOT
+}
+
 locals {
     instance_config = {
         shape_id = "VM.Standard.E2.1.Micro"
