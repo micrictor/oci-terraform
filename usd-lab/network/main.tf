@@ -57,5 +57,26 @@ resource "oci_core_subnet" "public_subnet" {
   vcn_id = oci_core_vcn.lab_network.id
   cidr_block = oci_core_vcn.lab_network.cidr_blocks[0]
   display_name = "Public subnet"
-  security_list_ids = [ oci_core_security_list.ssh_inbound_list.id, oci_core_vcn.lab_network.default_security_list_id ]
+  security_list_ids = [ oci_core_vcn.lab_network.default_security_list_id ]
+}
+
+resource "oci_core_network_security_group" "permit_ssh" {
+  compartment_id = var.compartment_id
+  vcn_id = oci_core_vcn.lab_network.id
+  display_name = "Permit SSH"
+}
+
+resource "oci_core_network_security_group_security_rule" "permit_ssh" {
+    #Required
+    network_security_group_id = oci_core_network_security_group.permit_ssh.id
+    protocol = "6"
+    source = "0.0.0.0/0"
+    source_type = "CIDR_BLOCK"
+    tcp_options {
+      destination_port_range {
+        max = 22
+        min = 22
+      }
+    }
+    direction = "INGRESS"
 }

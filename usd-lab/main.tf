@@ -23,4 +23,5 @@ module "compute" {
 
   compartment_id   = var.compartment_id
   public_subnet_id = module.network.public_subnet.id
+  permit_ssh_nsg_id = module.network.permit_ssh.id
 }
