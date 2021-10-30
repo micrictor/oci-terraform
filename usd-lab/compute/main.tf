@@ -1,17 +1,17 @@
 resource "oci_core_instance" "bastion_instance" {
     compartment_id = var.compartment_id
-    availability_domain = var.availability_domain
+    availability_domain = local.instance_config.availability_domain
     display_name = "Bastion instance"
-    shape = var.bastion_shape
+    shape = local.instance_config.shape_id
     source_details {
-        source_id = var.bastion_image
-        source_type = "image"
+        source_id = local.instance_config.source_details.source_id
+        source_type = local.instance_config.source_details.source_type
     }
     create_vnic_details {
         subnet_id = var.public_subnet_id
     }
     metadata = {
-      "ssh_authorized_keys" = join("\n", var.ssh_authorized_keys)
+      "ssh_authorized_keys" = local.instance_config.metadata.ssh_authorized_keys
       "user_data" = base64encode(var.bastion_user_data)
     }
 }

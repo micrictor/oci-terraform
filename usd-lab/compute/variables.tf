@@ -14,19 +14,6 @@ variable "availability_domain" {
     default = "xdil:US-SANJOSE-1-AD-1"
 }
 
-variable "bastion_shape" {
-    description = "Shape for the bastion host"
-    type = string
-    default = "VM.Standard.E2.1.Micro"
-}
-
-variable "bastion_image" {
-    description = "Image for the bastion host"
-    type = string
-    // Canonical-Ubuntu-20.04-2021.10.15-0
-    default = "ocid1.image.oc1.us-sanjose-1.aaaaaaaaugtulb77ufxo7io3zw2hj2cy34oerrfjweg6hlvxaffze754mm7a"
-}
-
 variable "ssh_authorized_keys" {
     description = "List of authorized SSH keys"
     type = list
@@ -48,4 +35,19 @@ variable "bastion_user_data" {
     && sudo apt update \
     && sudo DEBIAN_FRONTEND=noninteractive apt install -y kali-linux-headless
     EOT
+}
+
+locals {
+    instance_config = {
+        shape_id = "VM.Standard.E2.1.Micro"
+        source_details = {
+            // Canonical-Ubuntu-20.04-2021.10.15-0
+            source_id = "ocid1.image.oc1.us-sanjose-1.aaaaaaaaugtulb77ufxo7io3zw2hj2cy34oerrfjweg6hlvxaffze754mm7a"
+            source_type = "image"
+        }
+        metadata = {
+            "ssh_authorized_keys" = join("\n", var.ssh_authorized_keys)
+        }
+        availability_domain = var.availability_domain
+    }
 }
